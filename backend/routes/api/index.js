@@ -1,11 +1,10 @@
 const router = require('express').Router();
 
-router.post('/test', function(req, res) {
-    res.json({ requestBody: req.body });
-  });
+// GET /api/restore-user
+//restoreUser middleware should be connected before any other middleware or route handlers are connected to the router.
+const { restoreUser } = require('../../utils/auth.js');
 
-
-
+router.use(restoreUser);
 
 
 
