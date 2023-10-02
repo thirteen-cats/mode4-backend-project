@@ -6,8 +6,8 @@
 
 ![database-schema]
 
-[database-schema]: `<insert link or local path to database schema>`
-
+[database-schema]: ./schema.png
+[schema-info]: ./schema-info.txt
 ## API Documentation
 
 ## USER AUTHENTICATION/AUTHORIZATION

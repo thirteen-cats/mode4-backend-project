@@ -1,0 +1,74 @@
+Table Users {
+  id integer PK
+  firstName STRING
+  lastName STRING
+  username STRING
+  hashedPassword STRING
+  email STRING
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table Spots {
+  id integer PK
+  ownerId integer // FK from Users.id
+  address STRING
+  city STRING
+  state STRING
+  country STRING
+  lat DECIMAL
+  lng DECIMAL
+  name STRING
+  description STRING
+  price DECIMAL
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table Bookings {
+  id integer PK
+  spotId integer // FK from Spots.id
+  userId integer // FK from Users.id
+  startDate DATE
+  endDate DATE
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table SpotImages {
+  id integer PK
+  spotId integer // FK from Spots.id
+  url STRING
+  preview BOOLEAN
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table Reviews {
+  id integer PK
+  spotId integer // FK from Spots.id
+  userId integer // FK from Users.id
+  review STRING
+  stars integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table ReviewImages {
+  id integer PK
+  reviewId integer // FK from Reviews.id
+  url STRING
+  created_at timestamp
+  updated_at timestamp
+}
+
+Ref: "Users"."id" - "Spots"."ownerId"
+Ref: "Users"."id" - "Reviews"."userId"
+Ref: "Users"."id" - "Bookings"."userId"
+
+Ref: "Spots"."id" - "Reviews"."spotId"
+Ref: "Spots"."id" - "SpotImages"."spotId"
+
+Ref: "Bookings"."spotId" - "Spots"."id"
+
+Ref: "Reviews"."id" - "ReviewImages"."reviewId"
