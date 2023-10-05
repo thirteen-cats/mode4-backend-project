@@ -62,13 +62,13 @@ Table ReviewImages {
   updated_at timestamp
 }
 
-Ref: "Users"."id" - "Spots"."ownerId"
-Ref: "Users"."id" - "Reviews"."userId"
-Ref: "Users"."id" - "Bookings"."userId"
+Ref: "Users"."id" < "Spots"."ownerId"
+Ref: "Users"."id" < "Reviews"."userId"
+Ref: "Users"."id" < "Bookings"."userId"
 
-Ref: "Spots"."id" - "Reviews"."spotId"
-Ref: "Spots"."id" - "SpotImages"."spotId"
+Ref: "Spots"."id" < "Reviews"."spotId"
+Ref: "Spots"."id" < "SpotImages"."spotId"
 
 Ref: "Bookings"."spotId" - "Spots"."id"
 
-Ref: "Reviews"."id" - "ReviewImages"."reviewId"
+Ref: "Reviews"."id" < "ReviewImages"."reviewId"
