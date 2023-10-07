@@ -17,6 +17,13 @@ module.exports = (sequelize, DataTypes) => {
           onDelete: "CASCADE"
         }
       )
+      // Review.hasMany( models.ReviewImage,
+      //   {
+      //     foreignKey: "reviewId",
+      //     as: "previewImage",
+      //     onDelete: "CASCADE"
+      //   }
+      // )
       Review.belongsTo( models.User,
         {
           foreignKey: "userId"
