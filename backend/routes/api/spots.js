@@ -114,10 +114,10 @@ router.post( '/', requireAuth, validateSpot, async (req, res) => {
     }
     const newSpot = await Spot.create({ ownerId: user.id, address, city, state, country, lat, lng, name, description, price });
     return res.status(201).json(newSpot)
-    })
+})
 
 //Get details of a Spot from an id
-router.get("spots/:spotId", async (req, res) => {
+router.get("/:spotId", async (req, res, next) => {
     let spotId = req.params.spotId;
     const spot = await Spot.findOne({
         where: { id: spotId, },
@@ -151,20 +151,63 @@ router.get("spots/:spotId", async (req, res) => {
             "createdAt",
             "updatedAt",
             [ sequelize.fn("COUNT", sequelize.col("Reviews.id")), "numReviews" ],
-            [ sequelize.fn("ROUND", sequelize.fn("AVG", sequelize.col("stars")), 2), "avgRating" ],
+            [ sequelize.fn("ROUND", sequelize.fn("AVG", sequelize.col("stars")), 2), "avgStarRating" ],
             ],
         group: ["Spot.id", "Owner.id", "SpotImages.id"],
         });
 
-    const avgRating = Number(spot.dataValues.avgRating).toFixed(2);
-
-    if (spot) spot.dataValues.avgRating = avgRating;
-    if (spot) {
+       if (spot) {
+        const avgStarRating = Number(spot.dataValues.avgStarRating).toFixed(1);
+        spot.dataValues.avgStarRating = avgStarRating;
         return res.status(200).json(spot);
     } else {
-         return res.status(404).json({ message: "Spot couldn't be found" });
+        return res.status(404).json({ message: "Spot couldn't be found" });
     }
 });
+
+//Edit a Spot
+router.put("/:spotId", requireAuth, validateSpot, async (req, res, next) => {
+    let spotId = req.params.spotId;
+    const user = req.user;
+    const { address, city, state, country, lat, lng, name, description, price } =
+      req.body;
+
+    let currentSpot = await Spot.findByPk(spotId);
+
+    if (currentSpot) {
+      if (user.id === currentSpot.ownerId) {
+        currentSpot.address = address;
+        currentSpot.city = city;
+        currentSpot.state = state;
+        currentSpot.country = country;
+        currentSpot.lat = lat;
+        currentSpot.lng = lng;
+        currentSpot.name = name;
+        currentSpot.description = description;
+        currentSpot.price = price;
+
+        await currentSpot.save();
+        return res.status(200).json(currentSpot);
+      } else return res.status(403).json("Forbidden");
+    } else return res.status(404).json("Spot couldn't be found");
+  });
+
+  //Delete spot by Id
+  router.delete("/:spotId", requireAuth, async (req, res, next) => {
+    const user = req.user;
+    const spotId = req.params.spotId;
+
+    const currentSpot = await Spot.findByPk(spotId);
+
+    if (currentSpot) {
+      if (user.id === currentSpot.ownerId) {
+        await currentSpot.destroy();
+
+        return res.status(200).json({ message: "Successfully deleted!" });
+      } else return res.status(403).json({ message: "Forbidden!" });
+    } else return res.status(404).json({ message: "Spot couldn't be found!" });
+  });
+
 
 
 
