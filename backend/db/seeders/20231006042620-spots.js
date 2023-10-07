@@ -10,7 +10,7 @@ module.exports = {
     options.tableName = 'Spots';
     return queryInterface.bulkInsert(options, [
       {
-        userId: 1,
+        ownerId: 1,
         address: '111 Main St',
         city: 'New York',
         state: 'NY',
@@ -20,10 +20,10 @@ module.exports = {
         name: 'Ny Apartment',
         description: 'Best view over the Big Apple',
         price: 100.00,
-        previewImage: 'https://freeimage.host/i/J2ApRqJ'
+        // previewImage: 'https://freeimage.host/i/J2ApRqJ'
       },
       {
-        userId: 2,
+        ownerId: 2,
         address: '222 Oak St',
         city: 'Los Angeles',
         state: 'CA',
@@ -33,9 +33,10 @@ module.exports = {
         name: 'Glass House',
         description: 'A lplace like a piece of art!',
         price: 500.00,
-        previewImage: 'https://freeimage.host/i/J2ApRqJ'      },
+        // previewImage: 'https://freeimage.host/i/J2ApRqJ'
+      },
       {
-        userId: 3,
+        ownerId: 3,
         address: '333 Cherry St',
         city: 'Chicago',
         state: 'IL',
@@ -45,9 +46,10 @@ module.exports = {
         name: 'Chicago Flat',
         description: 'The best of Chicago sights close by!',
         price: 200.00,
-        previewImage: 'https://freeimage.host/i/J2ApRqJ'      },
+        // previewImage: 'https://freeimage.host/i/J2ApRqJ'
+      },
       {
-        userId: 4,
+        ownerId: 4,
         address: '444 Mission St',
         city: 'San Francisco',
         state: 'CA',
@@ -57,9 +59,10 @@ module.exports = {
         name: 'Leaning Tower',
         description: 'Like Piza tower, but in the heart of SF!',
         price: 150.00,
-        previewImage: 'https://freeimage.host/i/J2ApRqJ'      },
+        // previewImage: 'https://freeimage.host/i/J2ApRqJ'
+      },
       {
-        userId: 5,
+        ownerId: 5,
         address: '555 Cedar Rd',
         city: 'Miami',
         state: 'FL',
@@ -69,9 +72,10 @@ module.exports = {
         name: 'Florida Heat Glory',
         description: 'The heat is outside, enjoy the AC in the room!',
         price: 300.00,
-        previewImage: 'https://freeimage.host/i/J2ApRqJ'      },
+        // previewImage: 'https://freeimage.host/i/J2ApRqJ'
+      },
       {
-        userId: 6,
+        ownerId: 6,
         address: '777 Maple St',
         city: 'Sunnyvale',
         state: 'CA',
@@ -81,7 +85,8 @@ module.exports = {
         name: 'Parrot nest',
         description: 'A cozy apartment with nice flock of 20 parakeets',
         price: 120.00,
-        previewImage: 'https://freeimage.host/i/J2ApRqJ'      }
+        // previewImage: 'https://freeimage.host/i/J2ApRqJ'
+      }
       ], {});
   },
 

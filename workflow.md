@@ -28,3 +28,10 @@ npx sequelize model:generate --name ReviewImage --attributes reviewId:integer,ur
 ## 3.0 Identify what routes are needed and implement
 
 ## 4.0 Begin working on all our routes in the API docs starting from top to bottom
+
+### To create DB in backend folder:
+```
+npx dotenv sequelize db:migrate
+npx dotenv sequelize db:seed:all
+
+```
