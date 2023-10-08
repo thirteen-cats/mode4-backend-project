@@ -8,7 +8,7 @@ const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 
 const { requireAuth } = require("../../utils/auth");
-
+const { calculateRating, setPreviewImage, pickAttributes } = require("../../utils/common");
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
@@ -104,7 +104,7 @@ const validateQuery = [
 
 
 //Get all Reviews by a Spot's id
-router.get("/:spotId/reviews", async (req, res, next) => {
+router.get("/:spotId/reviews", requireAuth, async (req, res, next) => {
     const spotId = req.params.spotId;
 
     const reviews = await Review.findAll({
@@ -384,26 +384,46 @@ router.get('/current', requireAuth, async (req, res, next) => {
   });
 
 //Get all spots
-router.get('/', validateQuery, async (req, res) => {
-    const allSpots = await Spot.findAll();
+router.get('/', async (req, res) => {
+    const allSpots = await Spot.findAll({
+      include: [{
+        model: SpotImage,
+        required: false,
+        where: {
+          preview: true
+        }
+      },
+      {
+        model: Review,
+        required: false
 
-   // let avgRating = Sequelize.fn('AVG', Sequelize.cast(Sequelize.col('Reviews.stars'), 'FLOAT'));
-
-    // let rating = await Review.findAll({
-    //   where:{ spotId}
-    // })
-
-    for (const spot of spots) {
-      const previewImage = await SpotImage.findOne({
-        attributes: ["url"],
-        where: { spotId: spot.id, preview: true },
-      });
-      if (previewImage) {
-        spot.dataValues.previewImage = previewImage.dataValues.url;
-      }
+      }]
+    });
+    const attributesToReturn = [
+    "id",
+    "ownerId",
+    "address",
+    "city",
+    "state",
+    "country",
+    "lat",
+    "lng",
+    "name",
+    "description",
+    "price",
+    "createdAt",
+    "updatedAt",
+    "avgRating",
+    "previewImage"
+  ]
+    calculateRating(allSpots);
+    let t = 1;
+    setPreviewImage(allSpots);
+    const returnResults = [];
+    for (const spot of allSpots) {
+      returnResults.push(pickAttributes(spot, attributesToReturn))
     }
-
-    return res.json({Spots: allSpots})
+    return res.json({Spots: returnResults})
 })
 
 
