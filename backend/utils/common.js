@@ -8,7 +8,6 @@ const calculateRating = spots => {
                 totalRatingSum += review.stars
             }
             );
-            // spot.dataValues.avgRating = totalRatingSum / Reviews.length;
             spot.dataValues.avgRating = Math.round(totalRatingSum * 100.0 / Reviews.length) / 100;
         }else{
             spot.dataValues.avgRating = 0

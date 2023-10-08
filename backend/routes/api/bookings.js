@@ -8,8 +8,8 @@ const { User, Spot, SpotImage, Review, ReviewImage, Booking, sequelize } = requi
 //const { check } = require('express-validator');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
-
-
+const { spotAttributes } = require('../constants');
+const {setPreviewImage, pickAttributes } = require("../../utils/common");
 // router.get('/current', requireAuth, async (req, res, next) => {
 //     const userId = req.user.id;
 //     const bookings = await Booking.findAll({
@@ -30,45 +30,59 @@ router.get('/current', requireAuth, async (req, res) => {
       include: [
         {
           model: Spot,
+          required: false,
           attributes: {
             exclude: ['createdAt', 'updatedAt', 'description']
           },
           include: {
             model: SpotImage,
+            required: false,
             attributes: ['url'],
+            where: {
+                preview: true
+            },
             limit: 1
           },
         }
       ],
       where: { userId: req.user.id }
     })
+    bookings
 
-    const print = bookings.map((booking) => {
-      const temp = booking.toJSON();
-      const final = {}
+     const currSpotAttributes = spotAttributes.filter(attr => !["avgRating", "createdAt", "updatedAt", "description"].includes(attr));
+    for (const booking of bookings) {
+      const currSpot = booking.Spot;
+      setPreviewImage([currSpot]);
+      const modifiedSpot = pickAttributes(currSpot, currSpotAttributes);
+      booking.dataValues.Spot = modifiedSpot;
+    }
 
-      if(temp.Spot.SpotImages.length > 0) {
-        temp.Spot.previewImage = temp.Spot.SpotImages[0].url
-      }
-      else {
-        temp.Spot.previewImage = ''
-      }
+    // const print = bookings.map((booking) => {
+    //   const temp = booking.toJSON();
+    //   const final = {}
 
-      //placing in order
-      final.id = temp.id;
-      final.spotId = temp.spotId;
-      final.Spot = temp.Spot;
-      final.userId = temp.userId;
-      final.startDate = temp.startDate;
-      final.endDate = temp.endDate;
-      final.createdAt = temp.createdAt;
-      final.updatedAt = temp.updatedAt;
+    //   if(temp.Spot.SpotImages.length > 0) {
+    //     temp.Spot.previewImage = temp.Spot.SpotImages[0].url
+    //   }
+    //   else {
+    //     temp.Spot.previewImage = ''
+    //   }
 
-      delete final.Spot.SpotImages;
-      return final;
-    });
+    //   //placing in order
+    //   final.id = temp.id;
+    //   final.spotId = temp.spotId;
+    //   final.Spot = temp.Spot;
+    //   final.userId = temp.userId;
+    //   final.startDate = temp.startDate;
+    //   final.endDate = temp.endDate;
+    //   final.createdAt = temp.createdAt;
+    //   final.updatedAt = temp.updatedAt;
 
-    return res.json({Bookings: print});
+    //   delete final.Spot.SpotImages;
+    //   return final;
+    // });
+
+    return res.json({Bookings: bookings});
   })
 
   router.delete('/:bookingId', requireAuth, async (req, res) => {
