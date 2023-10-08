@@ -5,6 +5,8 @@ const { Op, Sequelize } = require('sequelize');
 const { User, Spot, SpotImage, Review, ReviewImage, Booking  } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
+
+//Delete a Spot Image
 router.delete('/:imageId', requireAuth, async (req, res, next) => {
     const id = req.params.imageId;
     const user = req.user;

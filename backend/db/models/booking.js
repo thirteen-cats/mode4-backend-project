@@ -39,12 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        isDate: true,
-        startDateafterCurrentDate(value) {
-          if (new Date(value) <= new Date()) {
-            throw new Error("Start date must on or after current date.");
-          }
-        },
+        isDate: true
       },
     },
     endDate: {
@@ -57,13 +52,6 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    validate: {
-      startDateAfterEndDate() {
-        if (!this.start_date.isBefore(this.end_date)) {
-          throw new Error("endDate cannot be on or before startDate");
-        }
-      }
-    },
     modelName: 'Booking',
   });
   return Booking;

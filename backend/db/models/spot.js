@@ -131,9 +131,15 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: "Price per day is required"
         },
-
       },
-    }
+    },
+
+    // previewImage: {
+    //   type: DataTypes.STRING,
+    //   validate: {
+    //     isUrl: true
+    //   }
+    // }
   }, {
     sequelize,
     validate: {
