@@ -413,10 +413,10 @@ router.get("/:spotId", async (req, res, next) => {
         const avgStarRating = Number(spot.dataValues.avgStarRating).toFixed(1);
         spot.dataValues.avgStarRating = avgStarRating;
         return res.status(200).json(spot);
+      }
+    else {
+        return res.status(404).json({ message: "Spot couldn't be found" });
     }
-    // else {
-    //     return res.status(404).json({ message: "Spot couldn't be found" });
-    // }
 });
 
 

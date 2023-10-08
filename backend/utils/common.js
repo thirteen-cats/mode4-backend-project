@@ -43,30 +43,6 @@ const isQueryParamDefined = param => {
     return !(typeof param === "undefined" || (typeof param === "String" && param === ""))
 }
 
-// query("maxLng")
-// .optional(true)
-// .isFloat({ max: 180 })
-
-// .withMessage("Maximum longitude is invalid"),
-// query("minLng")
-// .optional(true)
-// .isFloat({ min: -180 })
-
-// .withMessage("Minumum longitude is invalid"),
-// query("maxLat")
-// .optional(true)
-// .isFloat({ max: 90 })
-// .withMessage("Maximum latitude is invalid"),
-// query("minLat")
-// .optional(true)
-// .isFloat({ min: -90 })
-  // minLat: decimal, optional
-  // maxLat: decimal, optional
-  // minLng: decimal, optional
-  // maxLng: decimal, optional
-  // minPrice: decimal, optional, minimum: 0
-  // maxPrice: decimal, optional, minimum: 0
-
 const formWhereQuery = queryParams => {
 
     const where = {}
