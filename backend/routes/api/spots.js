@@ -8,8 +8,9 @@ const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 
 const { requireAuth } = require("../../utils/auth");
-const { calculateRating, setPreviewImage, pickAttributes } = require("../../utils/common");
-const { check } = require('express-validator');
+const { calculateRating, setPreviewImage, pickAttributes, formWhereQuery, isQueryParamDefined } = require("../../utils/common");
+const { check, query } = require('express-validator');
+// const { query } = require('express-validator/check');
 const { handleValidationErrors } = require('../../utils/validation');
 const { spotAttributes } = require('../constants');
 
@@ -63,35 +64,35 @@ const validateReview = [
  ];
 
 const validateQuery = [
-    check("page")
+    query("page")
         .optional(true)
-        .isFloat({ min: 1 })
+        .isInt({ min: 1, max: 10 })
         .withMessage("Page must be greater than or equal to 1"),
-    check("size")
+    query("size")
         .optional(true)
-        .isFloat({ min: 1 })
+        .isInt({ min: 1, max: 20 })
         .withMessage("Size must be greater than or equal to 1"),
-    check("maxLng")
+    query("maxLng")
         .optional(true)
         .isFloat({ max: 180 })
         .withMessage("Maximum longitude is invalid"),
-    check("minLng")
+    query("minLng")
         .optional(true)
         .isFloat({ min: -180 })
         .withMessage("Minumum longitude is invalid"),
-    check("maxLat")
+    query("maxLat")
         .optional(true)
         .isFloat({ max: 90 })
         .withMessage("Maximum latitude is invalid"),
-    check("minLat")
+    query("minLat")
         .optional(true)
         .isFloat({ min: -90 })
         .withMessage("Minumum latitude is invalid"),
-    check("maxPrice")
+    query("maxPrice")
         .optional(true)
         .isFloat({ min: 0 })
         .withMessage("Maximum price must be greater than or equal to 0"),
-    check("minPrice")
+    query("minPrice")
         .optional(true)
         .isFloat({ min: 0 })
         .withMessage("Minimum price must be greater than or equal to 0"),
@@ -421,8 +422,23 @@ router.get("/:spotId", async (req, res, next) => {
 
 
 //Get all spots
-router.get('/', async (req, res) => {
+router.get('/', validateQuery, async (req, res) => {
+  const {query} = req;
+  // minLat: decimal, optional
+  // maxLat: decimal, optional
+  // minLng: decimal, optional
+  // maxLng: decimal, optional
+  // minPrice: decimal, optional, minimum: 0
+  // maxPrice: decimal, optional, minimum: 0
+  const queryParams = {
+    page: isQueryParamDefined(query.page) ? parseInt(query.page) : 1,
+    size: isQueryParamDefined(query.size) ? parseInt(query.size) : 20
+  }
+  const paginatedWhere = formWhereQuery(queryParams)
     const allSpots = await Spot.findAll({
+      limit: queryParams.size, // size
+      offset: queryParams.size * (queryParams.page - 1), // size * (page - 1)
+      where: formWhereQuery(query),
       include: [{
         model: SpotImage,
         required: false,
@@ -436,23 +452,7 @@ router.get('/', async (req, res) => {
 
       }]
     });
-  //   const attributesToReturn = [
-  //   "id",
-  //   "ownerId",
-  //   "address",
-  //   "city",
-  //   "state",
-  //   "country",
-  //   "lat",
-  //   "lng",
-  //   "name",
-  //   "description",
-  //   "price",
-  //   "createdAt",
-  //   "updatedAt",
-  //   "avgRating",
-  //   "previewImage"
-  // ]
+
     calculateRating(allSpots);
     setPreviewImage(allSpots);
     const returnResults = [];
