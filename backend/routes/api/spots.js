@@ -11,6 +11,7 @@ const { requireAuth } = require("../../utils/auth");
 const { calculateRating, setPreviewImage, pickAttributes } = require("../../utils/common");
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { spotAttributes } = require('../constants');
 
 const router = express.Router();
 
@@ -311,6 +312,62 @@ router.post("/:spotId/bookings", requireAuth, async (req, res) => {
   return res.status(200).json( booking );
 });
 
+// Get all Spots owned by the Current User
+router.get('/current', requireAuth, async (req, res, next) => {
+
+    const userId = req.user.id;
+    const allSpots = await Spot.findAll({
+      where: {
+        ownerId: userId
+      },
+      include: [{
+        model: SpotImage,
+        required: false,
+        where: {
+          preview: true
+        }
+      },
+      {
+        model: Review,
+        required: false
+
+      }]
+    })
+      // attributes: {
+      //   include: [
+      //     [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating']
+      //   ]
+      // },
+
+      // const attributesToReturn = [
+      //   "id",
+      //   "ownerId",
+      //   "address",
+      //   "city",
+      //   "state",
+      //   "country",
+      //   "lat",
+      //   "lng",
+      //   "name",
+      //   "description",
+      //   "price",
+      //   "createdAt",
+      //   "updatedAt",
+      //   "avgRating",
+      //   "previewImage"
+      // ]
+        calculateRating(allSpots);
+        setPreviewImage(allSpots);
+        const returnResults = [];
+        for (const spot of allSpots) {
+          returnResults.push(pickAttributes(spot, spotAttributes))
+        }
+        return res.json({Spots: returnResults})
+
+
+
+  });
+
 //Get details of a Spot from an id
 router.get("/:spotId", async (req, res, next) => {
     let spotId = req.params.spotId;
@@ -361,27 +418,7 @@ router.get("/:spotId", async (req, res, next) => {
     // }
 });
 
-// Get all Spots owned by the Current User
-router.get('/current', requireAuth, async (req, res, next) => {
-    const userId = req.user.id;
-    const spots = await Spot.findAll({
-      where: { ownerId: userId },
-      include: [
-        {
-          model: Review,
-          attributes: []
-        },
-      ],
-      attributes: {
-        include: [
-          [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating']
-        ]
-      },
-      group: ['Spot.id']
-    });
 
-    return res.status(200).json({ Spots: spots})
-  });
 
 //Get all spots
 router.get('/', async (req, res) => {
@@ -399,29 +436,28 @@ router.get('/', async (req, res) => {
 
       }]
     });
-    const attributesToReturn = [
-    "id",
-    "ownerId",
-    "address",
-    "city",
-    "state",
-    "country",
-    "lat",
-    "lng",
-    "name",
-    "description",
-    "price",
-    "createdAt",
-    "updatedAt",
-    "avgRating",
-    "previewImage"
-  ]
+  //   const attributesToReturn = [
+  //   "id",
+  //   "ownerId",
+  //   "address",
+  //   "city",
+  //   "state",
+  //   "country",
+  //   "lat",
+  //   "lng",
+  //   "name",
+  //   "description",
+  //   "price",
+  //   "createdAt",
+  //   "updatedAt",
+  //   "avgRating",
+  //   "previewImage"
+  // ]
     calculateRating(allSpots);
-    let t = 1;
     setPreviewImage(allSpots);
     const returnResults = [];
     for (const spot of allSpots) {
-      returnResults.push(pickAttributes(spot, attributesToReturn))
+      returnResults.push(pickAttributes(spot, spotAttributes))
     }
     return res.json({Spots: returnResults})
 })

@@ -9,7 +9,8 @@ const { requireAuth } = require("../../utils/auth");
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-
+const {setPreviewImage, pickAttributes } = require("../../utils/common");
+const { spotAttributes } = require('../constants');
 const router = express.Router();
 
 const validateReview = [
@@ -29,7 +30,7 @@ const validateReview = [
 // //Get all Reviews of the Current User -- broken!! (avgRating, previewImage)
 router.get('/current', requireAuth, async (req, res, next) => {
     const userId = req.user.id;
-    const rewiews = await Review.findAll({
+    const reviews = await Review.findAll({
         where: { userId },
         include: [
             {
@@ -38,26 +39,32 @@ router.get('/current', requireAuth, async (req, res, next) => {
             },
             {
                 model: Spot,
+                required: false,
                 attributes: {
                     exclude: ['createdAt', 'updatedAt', 'description']
                 },
-                    include: {
+                include: {
                         model: SpotImage,
-                        // attributes: ['url'],
-                        // limit: 1
-                        },
+                        required: false,
+                },
             },
             {
                 model: ReviewImage,
-                //as: "previewImage",
                 attributes: ["id", "url"]
             },
         ],
 
         //group: ["Review.id", "User.id", "Spot.id", "ReviewImage.id"]
     });
+    const currSpotAttributes = spotAttributes.filter(attr => attr !== "avgRating");
+    for (const review of reviews) {
+      const currSpot = review.Spot;
+      setPreviewImage([currSpot]);
+      const modifiedSpot = pickAttributes(currSpot, currSpotAttributes);
+      review.dataValues.Spot = modifiedSpot
+    }
 
-    return res.status(200).json({ Reviews: rewiews})
+    return res.status(200).json({ Reviews: reviews})
   });
 
 //Edit a Review
