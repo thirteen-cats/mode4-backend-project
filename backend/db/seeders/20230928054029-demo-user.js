@@ -11,10 +11,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up (queryInterface, Sequelize) {
     options.tableName = 'Users';
-    // await Sequelize.query("TRUNCATE TABLE Users RESTART IDENTITY", { type: QueryTypes.RAW });
-    // await queryInterface.sequelize.query(
-    //   `TRUNCATE TABLE public."Users" RESTART IDENTITY;`
-    // )
+
     await User.bulkCreate([
       {
         id: 1,
