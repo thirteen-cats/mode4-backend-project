@@ -2,7 +2,6 @@
 
 const { User } = require('../models');
 const bcrypt = require("bcryptjs");
-const { QueryTypes } = require('sequelize');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -12,7 +11,10 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up (queryInterface, Sequelize) {
     options.tableName = 'Users';
-    await Sequelize.query("TRUNCATE TABLE Users RESTART IDENTITY", { type: QueryTypes.RAW });
+    // await Sequelize.query("TRUNCATE TABLE Users RESTART IDENTITY", { type: QueryTypes.RAW });
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE Users RESTART IDENTITY;`
+    )
     await User.bulkCreate([
       {
         email: 'demo@user.io',
