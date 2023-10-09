@@ -11,7 +11,6 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up (queryInterface, Sequelize) {
     options.tableName = 'Users';
-    await queryInterface.sequelize.query(`TRUNCATE "Users" RESTART IDENTITY;`);
     await User.bulkCreate([
       {
         email: 'demo@user.io',
@@ -68,6 +67,6 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     options.tableName = 'Users';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, null, {});
+    return queryInterface.bulkDelete(options,  null, { truncate: true, cascade: true });
   }
 };
