@@ -13,7 +13,7 @@ module.exports = {
     options.tableName = 'Users';
     // await Sequelize.query("TRUNCATE TABLE Users RESTART IDENTITY", { type: QueryTypes.RAW });
     await queryInterface.sequelize.query(
-      `TRUNCATE TABLE Users RESTART IDENTITY;`
+      `TRUNCATE TABLE public."Users" RESTART IDENTITY;`
     )
     await User.bulkCreate([
       {
