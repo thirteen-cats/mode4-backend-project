@@ -10,18 +10,21 @@ module.exports = {
     options.tableName = 'ReviewImages';
     return queryInterface.bulkInsert(options, [
       {
+        id: 1,
         reviewId: 1,
         url: "https://freeimage.host/i/J2ApRqJ",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
+        id: 2,
         reviewId: 2,
         url: "https://freeimage.host/i/J2ApRqJ",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
+        id: 3,
         reviewId: 3,
         url: "https://freeimage.host/i/J2ApRqJ",
         createdAt: new Date(),

@@ -10,6 +10,7 @@ module.exports = {
     options.tableName = 'Spots';
     return queryInterface.bulkInsert(options, [
       {
+        id: 1,
         ownerId: 1,
         address: '111 Main St',
         city: 'New York',
@@ -23,6 +24,7 @@ module.exports = {
         // previewImage: 'https://freeimage.host/i/J2ApRqJ'
       },
       {
+        id: 2,
         ownerId: 2,
         address: '222 Oak St',
         city: 'Los Angeles',
@@ -36,6 +38,7 @@ module.exports = {
         // previewImage: 'https://freeimage.host/i/J2ApRqJ'
       },
       {
+        id: 3,
         ownerId: 3,
         address: '333 Cherry St',
         city: 'Chicago',
@@ -49,6 +52,7 @@ module.exports = {
         // previewImage: 'https://freeimage.host/i/J2ApRqJ'
       },
       {
+        id: 4,
         ownerId: 4,
         address: '444 Mission St',
         city: 'San Francisco',
@@ -62,6 +66,7 @@ module.exports = {
         // previewImage: 'https://freeimage.host/i/J2ApRqJ'
       },
       {
+        id: 5,
         ownerId: 5,
         address: '555 Cedar Rd',
         city: 'Miami',
@@ -75,6 +80,7 @@ module.exports = {
         // previewImage: 'https://freeimage.host/i/J2ApRqJ'
       },
       {
+        id: 6,
         ownerId: 6,
         address: '777 Maple St',
         city: 'Sunnyvale',
