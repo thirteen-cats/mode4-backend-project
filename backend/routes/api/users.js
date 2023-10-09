@@ -13,17 +13,17 @@ const validateSignup = [
     check('email')
       .exists({ checkFalsy: true })
       .isEmail()
-      .withMessage('Please provide a valid email.'),
+      .withMessage('Invalid email'),
     check('firstName')
       .notEmpty()
-      .withMessage('Please provide your first name.'),
+      .withMessage('First name is required'),
     check('lastName')
       .notEmpty()
-      .withMessage('Please provide your last name.'),
+      .withMessage('Last name is required'),
     check('username')
       .exists({ checkFalsy: true })
       .isLength({ min: 4 })
-      .withMessage('Please provide a username with at least 4 characters.'),
+      .withMessage('Username is required'),
     check('username')
       .not()
       .isEmail()
