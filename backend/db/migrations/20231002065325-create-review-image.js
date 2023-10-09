@@ -21,6 +21,7 @@ module.exports = {
           model: "Reviews",
           key: "id"
         },
+        onDelete: 'cascade'
       },
       url: {
         allowNull: false,

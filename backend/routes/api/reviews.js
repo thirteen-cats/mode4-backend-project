@@ -79,7 +79,7 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res) => {
 
   if(req.user.id !== currReview.userId) {
     res.status(403);
-    return res.json({"message": "Not Review Owner"})
+    return res.json({"message": "Forbidden"})
   }
 
 
@@ -113,7 +113,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
     //not the user
     if(req.user.id !== currReview.userId) {
       res.status(403);
-      return res.json({"message": "Not Review Owner"})
+      return res.json({"message": "Forbidden"})
     };
 
     //maximum count
@@ -153,7 +153,7 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
 
     if(parseInt(req.user.id) !== review.userId){
       res.status(403);
-      return res.json({"message": "Not Review Owner"})
+      return res.json({"message": "Forbidden"})
     }
 
     await review.destroy();

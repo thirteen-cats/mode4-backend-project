@@ -21,6 +21,7 @@ module.exports = {
           model: "Spots",
           key: "id"
         },
+        onDelete: 'cascade'
       },
       userId: {
         type: Sequelize.INTEGER,
