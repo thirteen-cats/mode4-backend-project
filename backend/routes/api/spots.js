@@ -383,7 +383,7 @@ router.get('/', validateQuery, async (req, res) => {
     for (const spot of allSpots) {
       returnResults.push(pickAttributes(spot, spotAttributes))
     }
-    return res.json({Spots: returnResults})
+    return res.json({Spots: returnResults, ...(isQueryParamDefined(query.page) || isQueryParamDefined(query.size) ? queryParams : {})})
 })
 
 
