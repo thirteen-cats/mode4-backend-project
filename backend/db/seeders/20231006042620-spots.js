@@ -92,6 +92,20 @@ module.exports = {
         description: 'A cozy apartment with nice flock of 20 parakeets',
         price: 120.00,
         // previewImage: 'https://freeimage.host/i/J2ApRqJ'
+      },
+      {
+        id: 7,
+        ownerId: 6,
+        address: '888 Apple Cider St',
+        city: 'PostmanTown',
+        state: 'CA',
+        country: 'AppAcademyLand',
+        lat: 35.6062,
+        lng: 35.6062,
+        name: 'Almost done with testing!!!!!',
+        description: 'Thank you for testing my CozycoRnR API!!!!!!',
+        price: 88.00,
+        // previewImage: 'https://freeimage.host/i/J2ApRqJ'
       }
       ], {});
   },
