@@ -51,7 +51,7 @@ module.exports = {
 
       }
     }, options);
-    await queryInterface.sequelize.query("TRUNCATE Users RESTART IDENTITY;")
+    await queryInterface.sequelize.query("TRUNCATE 'Users' RESTART IDENTITY;")
   },
   async down(queryInterface, Sequelize) {
     options.tableName = "Users";
