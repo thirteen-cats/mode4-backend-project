@@ -459,6 +459,9 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res, next) => {
 
     if (currentSpot) {
       if (user.id === currentSpot.ownerId) {
+        for (const booking of currentSpot.Bookings) {
+          await booking.destroy();
+        }
         await currentSpot.destroy();
         return res.status(200).json({ message: "Successfully deleted" });
       } else return res.status(403).json({ message: "Forbidden" });
