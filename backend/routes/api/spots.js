@@ -455,6 +455,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res, next) => {
     const user = req.user;
     const spotId = req.params.spotId;
 
+
     // const currentSpot = await Spot.findByPk(spotId);
     const currentSpot = await Spot.findOne({
       where: {id: spotId},
